@@ -10,6 +10,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Course } from "../model/course";
 import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 import * as moment from "moment";
+import { concatMap, filter } from "rxjs/operators";
+import { from } from "rxjs";
 
 @Component({
   selector: "course-dialog",
@@ -39,7 +41,26 @@ export class CourseDialogComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.form.valueChanges
+      .pipe(
+        filter(() => this.form.valid),
+        concatMap((changes) => this.saveCourse(changes))
+      )
+      .subscribe();
+  }
+
+  saveCourse(changes) {
+    return from(
+      fetch(`/api/courses/${this.course.id}`, {
+        method: "PUT",
+        body: JSON.stringify(changes),
+        headers: {
+          "content-type": "application/json",
+        },
+      })
+    );
+  }
 
   ngAfterViewInit() {}
 
