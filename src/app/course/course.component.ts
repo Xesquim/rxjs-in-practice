@@ -11,6 +11,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   map,
+  startWith,
   switchMap,
 } from "rxjs/operators";
 import { concat, fromEvent, Observable } from "rxjs";
@@ -41,6 +42,7 @@ export class CourseComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     const searchLessons$ = fromEvent(this.input.nativeElement, "keyup").pipe(
       map((event) => (<HTMLInputElement>(<Event>event).target).value),
+      startWith(""),
       debounceTime(400),
       distinctUntilChanged(),
       switchMap((search) => this.loadLessons(search))
