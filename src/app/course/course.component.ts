@@ -38,7 +38,8 @@ export class CourseComponent implements OnInit, AfterViewInit {
 
   lessons$: Observable<Lesson[]>;
 
-  @ViewChild("searchInput", { static: true }) input: ElementRef;
+  @ViewChild("searchInput", { static: true, read: ElementRef })
+  input: ElementRef;
 
   constructor(private route: ActivatedRoute, private store: Store) {}
 
@@ -64,7 +65,7 @@ export class CourseComponent implements OnInit, AfterViewInit {
     this.lessons$ = concat(initialLessons$, searchLessons$);
   }
 
-  loadLessons(search = ""): Observable<Lesson[]> {
+  loadLessons(search: string = ""): Observable<Lesson[]> {
     return createHttpObservable(
       `/api/lessons?courseId=${this.courseId}&pageSize=100&filter=${search}`
     ).pipe(map((res) => res["payload"]));

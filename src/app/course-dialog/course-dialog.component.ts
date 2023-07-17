@@ -33,7 +33,8 @@ export class CourseDialogComponent implements AfterViewInit {
 
   course: Course;
 
-  @ViewChild("saveButton", { static: true }) saveButton: ElementRef;
+  @ViewChild("saveButton", { static: true, read: ElementRef })
+  saveButton: ElementRef;
 
   @ViewChild("searchInput", { static: true }) searchInput: ElementRef;
 
